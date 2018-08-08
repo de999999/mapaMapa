@@ -24,12 +24,63 @@ function init() {
             })
         ],
         loadTilesWhileAnimating: true,
-        view: view
+        view:view
     });
+
+    console.log("LOADED@");
 }
 
 // How do we know our web page loads for the first time?
-document.addEventListener("DOMContentLoaded", function (e){
-    console.log("LOADED LSKDMFLKSDMFLKSDMFLKM")
-    init();
-});
+// document.addEventListener("DOMContentLoaded", function (e){
+//     console.log("LOADED LSKDMFLKSDMFLKSDMFLKM")
+//     init()
+// });
+
+window.onload = init;
+
+//Animates the map- zooms in(but we need to connect it to html)
+
+function panHome() {
+    view.animate({
+        center: ourLoc,
+        duration:2000
+    });
+}
+
+// Create a function that will go to a specific location
+// Using another API
+function panToLocation(){
+    var countryName = document.getElementById("country-name").value;
+
+    //Error check to make sure the country is spelled correctly
+    if(countryName ==="united states"){
+        alert("You didn't enter a country name!");
+        return;
+    }
+    var lon = 0.0;
+    var lat = 0.0;
+    
+
+    var query = "https://restcountries.eu/rest/v2/name/"+countryName; 
+    query = query.replace(/ /g, "%20");
+    alert(query);
+
+    var countryRequest = new  XMLHttpRequest();
+    countryRequest.open('GET', query, false);
+
+    countryRequest.send();
+
+    var countryInformation = JSON.parse(countryRequest.response(Text))
+    
+
+
+    var location = ol.proj.fromLonLat([lon, lat]);
+
+    view.animate({
+        center: location,
+        duration: 2000 
+    });
+}
+
+
+
